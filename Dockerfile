@@ -1,4 +1,4 @@
 FROM google/golang
+RUN mkdir -p /build && curl -sSL https://get.docker.com/ | sh
 ADD ./hack/build.sh /build.sh
-RUN mkdir -p /build
 CMD ["/build.sh"]
