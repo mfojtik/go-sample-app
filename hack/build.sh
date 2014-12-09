@@ -3,7 +3,6 @@
 IMAGE_NAME="openshift/origin-go-sample"
 TARGET_IMAGE="172.121.17.3:5001/${IMAGE_NAME}:prod"
 
-mkdir -p /build
 pushd /build >/dev/null
 CGO_ENABLED=0 go get -a -ldflags '-s' github.com/mfojtik/go-sample-app
 cat > Dockerfile <<- EOF
