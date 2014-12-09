@@ -24,6 +24,6 @@ EOF
 # Assemble the final scratch image, remove the temporary scratch image and push
 # to registry.
 docker build -t ${TARGET_IMAGE} .
-docker rmi ${IMAGE_INAME}-scratch
+docker rmi ${IMAGE_NAME}-scratch
 docker push ${TARGET_IMAGE}
 popd >/dev/null
