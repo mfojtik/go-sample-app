@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 IMAGE_NAME="openshift/origin-go-sample"
 TARGET_IMAGE="172.121.17.3:5001/${IMAGE_NAME}:prod"
