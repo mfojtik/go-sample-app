@@ -6,7 +6,7 @@ minimal Docker image from it. To execute this you can run:
 
 ```
 $ socket=/var/run/docker.sock
-$ docker pull mfojtik/mfojtik/go-sample-builder
+$ docker pull mfojtik/go-sample-builder
 $ docker run -v $socket:$socket mfojtik/go-sample-builder
 ```
 
