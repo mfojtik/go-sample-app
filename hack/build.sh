@@ -1,17 +1,29 @@
 #!/bin/bash -e
 
+# TODO: To make this generic Go static builder image we need to populate these
+#       vars from the $BUILD variable, passed from the CustomBuilder.
+#
+GO_SOURCE="github.com/mfojtik/go-sample-app"
+GO_BINARY="go-sample-app"
 IMAGE_NAME="openshift/origin-go-sample"
-TARGET_IMAGE="172.121.17.3:5001/${IMAGE_NAME}:prod"
+IMAGE_TAG="prod"
+TARGET_IMAGE="172.121.17.3:5001/${IMAGE_NAME}:${IMAGE_TAG}"
 
 pushd /build >/dev/null
-CGO_ENABLED=0 go get -a -ldflags '-s' github.com/mfojtik/go-sample-app
-tar cv /gopath/bin/go-sample-app | docker import - scratch
+# Build a static Go binary and create minimal Docker image from it
+CGO_ENABLED=0 go get -a -ldflags '-s' ${GO_SOURCE}
+(cd /gopath/bin && tar cv ${GO_BINARY}) | docker import - ${IMAGE_INAME}-scratch
+
+# The final image Dockerfile
 cat > Dockerfile <<- EOF
-FROM scratch
+FROM ${IMAGE_INAME}-scratch
 EXPOSE 8080
-ENTRYPOINT ["/gopath/bin/go-sample-app"]
+CMD ["${GO_BINARY}"]
 EOF
-docker build -t ${IMAGE_NAME} .
-docker tag ${IMAGE_NAME} ${TARGET_IMAGE}
+
+# Assemble the final scratch image, remove the temporary scratch image and push
+# to registry.
+docker build -t ${TARGET_IMAGE} .
+docker rmi ${IMAGE_INAME}-scratch
 docker push ${TARGET_IMAGE}
 popd >/dev/null
