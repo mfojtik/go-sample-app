@@ -9,7 +9,6 @@ IMAGE_NAME="openshift/origin-go-sample"
 IMAGE_TAG="prod"
 TARGET_IMAGE="172.121.17.3:5001/${IMAGE_NAME}:${IMAGE_TAG}"
 
-pushd /build >/dev/null
 # Build a static Go binary and create minimal Docker image from it
 CGO_ENABLED=0 go get -a -ldflags '-s' ${GO_SOURCE}
 (cd /gopath/bin && tar cv ${GO_BINARY}) | docker import - ${IMAGE_NAME}-scratch
@@ -26,4 +25,3 @@ EOF
 docker build -t ${TARGET_IMAGE} .
 docker rmi ${IMAGE_NAME}-scratch
 docker push ${TARGET_IMAGE}
-popd >/dev/null
